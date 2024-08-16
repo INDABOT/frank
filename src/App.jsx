@@ -69,49 +69,76 @@ function Sidebar() {
 function Content() {
   return (
     <section className="content">
-      <h2 className="title">
+      <h1 className="title">
         Best Practices for Building Scalable and Efficient NestJS Applications
-      </h2>
+      </h1>
       <p className="section-paragraph">
-        Building scalable applications with NestJS involves following certain
-        best practices and principles to ensure that your application is
-        maintainable, efficient, and ready to handle growth. Here are some key
-        points to keep in mind.
+        NestJS has rapidly gained popularity as a robust framework for building
+        scalable and maintainable Node.js applications. An increasing number of
+        backed developers now use NestJs to create Roboust backend projects. As
+        with all aspects of programming, there are best practices for building
+        NestJS projects.
+        <br />
+        <br />
+        This article explains some of NestJS best practices that are used to
+        build scalable, highly efficient, and maintainable NestJS backend
+        applications.
       </p>
+      <h2>Build Scalable Backend Projects with these Practices</h2>
 
       {/* First Section */}
       <h3 className="section-title" id="best-practices">
-        1. Use a Modular Structure
+        1. Using Modular Architecture: Break Down your Application into Smaller
+        Modules{" "}
       </h3>
+      <span>Modular Architecture</span>
+
       <p className="section-paragraph">
-        Using a modular structure allows for better separation of concerns and
-        easier management of code. Each module should encapsulate related
-        components, services, and controllers.
+        One of the core principles of NestJS is its modular architecture, which
+        encourages breaking down your application into smaller, self-contained
+        modules. Each module encapsulates a specific domain of your application,
+        such as user management, product management, or order processing. This
+        approach not only keeps your codebase organized but also enhances
+        maintainability and scalability by allowing you to manage and develop
+        different parts of your application independently.
       </p>
       <div className="code-block">
         <pre>
           <code>
-            {`import { Module } from '@nestjs/common';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-
-@Module({
-  imports: [UsersModule, AuthModule],
-  controllers: [],
-  providers: [],
-})
-export class AppModule {}`}
+            {`// users.module.ts
+            import { Module } from '@nestjs/common';
+            import { UsersController } from './users.controller';
+            import { UsersService } from './users.service';
+            @Module({
+             controllers: [UsersController], // Defines the controllers that belong to this module
+              providers: [UsersService], // Registers the service providers for dependency injection
+              })
+              export class UsersModule {} // Exports the UsersModule to be used in other parts of the application`}
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        The @Module decorator defines a module in NestJS. By grouping related
+        components (such as controllers and services) within a module, you
+        create a clear separation of concerns, making your code easier to
+        navigate and understand. This modular structure also allows for better
+        team collaboration, as different teams can work on different modules
+        simultaneously without causing conflicts.
+      </p>
 
       {/* Second Section */}
       <h3 className="section-title" id="logging">
-        2. Centralized Logging
+        2. Centralize Business Logic in Services{" "}
       </h3>
       <p className="section-paragraph">
-        Centralized logging ensures that all logs are collected in one place,
-        making it easier to monitor and troubleshoot the application.
+        Services in NestJS are classes that encapsulate your application's
+        business logic. By centralizing the business logic in services, you
+        promote code reuse and separation of concerns, which are critical for
+        building maintainable applications. Services are reusable across
+        different parts of your application, and they can be injected into
+        controllers or other services, making your code more modular and
+        testable.
       </p>
       <div className="code-block">
         <pre>
