@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import "./App.css";
 
 function Header() {
@@ -89,7 +90,7 @@ function Content() {
       {/* First Section */}
       <h3 className="section-title" id="best-practices">
         1. Using Modular Architecture: Break Down your Application into Smaller
-        Modules{" "}
+        Modules
       </h3>
       <span>Modular Architecture</span>
 
@@ -106,14 +107,14 @@ function Content() {
         <pre>
           <code>
             {`// users.module.ts
-            import { Module } from '@nestjs/common';
-            import { UsersController } from './users.controller';
-            import { UsersService } from './users.service';
-            @Module({
-             controllers: [UsersController], // Defines the controllers that belong to this module
-              providers: [UsersService], // Registers the service providers for dependency injection
-              })
-              export class UsersModule {} // Exports the UsersModule to be used in other parts of the application`}
+import { Module } from '@nestjs/common';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+@Module({
+controllers: [UsersController], // Defines the controllers that belong to this module
+providers: [UsersService], // Registers the service providers for dependency injection
+})
+export class UsersModule {} // Exports the UsersModule to be used in other parts of the application`}
           </code>
         </pre>
       </div>
@@ -129,7 +130,7 @@ function Content() {
 
       {/* Second Section */}
       <h3 className="section-title" id="logging">
-        2. Centralize Business Logic in Services{" "}
+        2. Centralize Business Logic in Services
       </h3>
       <p className="section-paragraph">
         Services in NestJS are classes that encapsulate your application's
@@ -143,42 +144,88 @@ function Content() {
       <div className="code-block">
         <pre>
           <code>
-            {`import { Logger } from '@nestjs/common';
-
-const logger = new Logger('MyApp');
-logger.log('Application has started');`}
+            {`// users.service.ts
+            import { Injectable } from '@nestjs/common';
+@Injectable()
+export class UsersService {
+private users = []; // Initializes an empty array to store user data
+create(user) {
+this.users.push(user); // Adds a new user to the array
+}
+findAll() {
+return this.users; // Returns all users in the array
+}}`}
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        The @Injectable decorator marks the class as a provider that can be
+        injected into other components. In this example, the UsersService
+        handles the core business logic related to user management, such as
+        creating new users and retrieving a list of all users. By encapsulating
+        this logic within a service, you ensure that your controllers remain
+        focused on handling HTTP requests, while the actual processing logic is
+        delegated to the service layer. This separation makes your application
+        easier to maintain and extend, as changes to the business logic only
+        need to be made in one place.
+      </p>
 
       {/* Third Section */}
       <h3 className="section-title" id="validation">
-        3. Use Validation Pipes
+        3. Dependency Injection: Separate Services(Standalone Classes) from
+        Clients
       </h3>
       <p className="section-paragraph">
-        Validation pipes help in ensuring that incoming data is validated and
-        sanitized before it reaches the controller logic.
+        Dependency injection (DI) is a fundamental concept in NestJS, allowing
+        you to inject dependencies into your classes instead of hard-coding
+        them. This promotes loose coupling and makes your code more modular and
+        easier to test. By leveraging DI, you can inject services, repositories,
+        or other dependencies into your controllers, services, or other
+        components, ensuring that each component only relies on the interfaces
+        it needs to function.
       </p>
       <div className="code-block">
         <pre>
           <code>
-            {`import { IsString } from 'class-validator';
-
-export class CreateUserDto {
-  @IsString()
-  readonly name: string;
+            {`// users.controller.ts;
+import { Controller, Post, Body } from '@nestjs/common';
+import { UsersService } from './users.service';
+@Controller('users') // Defines the route prefix for this controller
+export class UsersController {
+constructor(private readonly usersService: UsersService) {} // Injects UsersService into the controller
+@Post()
+create(@Body() user) {
+this.usersService.create(user); // Calls the service's create method to add a new user
+}
 }`}
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        In this example, the UsersService is injected into the UsersController
+        through the constructor. This is a prime example of dependency injection
+        in action. Instead of the controller instantiating the service directly,
+        NestJS handles the creation and injection of the service instance. This
+        approach allows for better testing, as you can easily mock or replace
+        dependencies in your tests without modifying the actual implementation.
+        Additionally, DI encourages following the SOLID principles, particularly
+        the Dependency Inversion Principle, which states that high-level modules
+        should not depend on low-level modules but on abstractions.
+      </p>
 
       {/* Fourth Section */}
       <h3 className="section-title" id="exception">
         4. Use Middleware for Request Handling
       </h3>
       <p className="section-paragraph">
-        Middleware can help in handling requests and performing specific actions
-        before the request reaches the controller.
+        Middleware functions in NestJS are used to process requests before they
+        reach your route handlers. Middleware is useful for tasks such as
+        logging, authentication checks, or transforming request data. By using
+        middleware, you can apply common logic across multiple routes without
+        duplicating code, which leads to cleaner and more maintainable
+        applications.
       </p>
       <div className="code-block">
         <pre>
@@ -195,75 +242,128 @@ export class LoggerMiddleware implements NestMiddleware {
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        The LoggerMiddleware in this example logs each incoming request's method
+        and path. Middleware like this is particularly useful for monitoring and
+        debugging your application. By logging every request, you can gain
+        valuable insights into how your application is being used, identify
+        performance bottlenecks, and detect unusual patterns that may indicate
+        security issues. Additionally, middleware can be used to enforce
+        authentication or to parse and validate request data before it reaches
+        your controllers, ensuring that your application behaves predictably and
+        securely.
+      </p>
 
       {/* Fifth Section */}
       <h3 className="section-title" id="modules">
-        5. Managing Dependencies in Modules
+        5. Routing should be handled by Controllers{" "}
       </h3>
       <p className="section-paragraph">
-        Properly managing dependencies within modules ensures that your
-        application remains scalable and maintainable.
+        Controllers in NestJS are responsible for handling incoming HTTP
+        requests and returning responses to the client. They define the routes
+        of your application and delegate the actual processing of requests to
+        services or other components. By keeping your controllers focused on
+        routing and request handling, you ensure that your application's
+        business logic is properly separated from its presentation layer.
       </p>
       <div className="code-block">
         <pre>
           <code>
-            {`import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
-
-@Module({
-  providers: [UsersService],
-  controllers: [UsersController],
-})
-export class UsersModule {}`}
+            {`// users.controller.ts
+            import { Controller, Get } from '@nestjs/common';
+            import { UsersService } from './users.service';
+            @Controller('users') // Defines the route prefix for this controller
+            export class UsersController {
+            constructor(private readonly usersService: UsersService) {} // Injects UsersService into the controller 
+            @Get()
+            findAll() {
+            return this.usersService.findAll(); // Calls the service's findAll method to return all users
+            }
+            }`}
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        The @Controller decorator defines a controller in NestJS, with the route
+        prefix specified as 'users'. The @Get decorator maps HTTP GET requests
+        to the findAll method, which retrieves all users from the service. By
+        adhering to this pattern, you maintain a clear separation of concerns,
+        with the controller focused solely on handling HTTP requests and
+        responses, while the service layer manages the underlying business
+        logic. This structure not only makes your code more maintainable but
+        also facilitates testing, as each component can be tested in isolation.
+      </p>
 
       {/* Sixth Section */}
       <h3 className="section-title" id="dto">
-        6. Using Data Transfer Objects (DTO)
+        6. Make Cleaner Codes with Custom Decorators{" "}
       </h3>
       <p className="section-paragraph">
-        DTOs are used to define the shape of data sent and received by your
-        application. They help ensure that your application receives the
-        expected data format.
+        Custom decorators in NestJS allow you to encapsulate common logic that
+        is used across multiple endpoints, improving code readability and
+        reducing redundancy. By creating custom decorators, you can simplify
+        your controller methods and make your code more expressive and easier to
+        understand.
       </p>
       <div className="code-block">
         <pre>
           <code>
-            {`export class CreateUserDto {
-  @IsString()
-  readonly name: string;
-}`}
+            {`import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+            export const User = createParamDecorator(
+             (data: unknown, ctx: ExecutionContext) => {
+             const request = ctx.switchToHttp().getRequest(); // Switches the context to HTTP and gets the request object
+              return request.user; // Returns the user object from the request
+               },
+               );`}
           </code>
         </pre>
       </div>
+      <span>Code Explanation</span>
+      <p className="code_explain">
+        The User decorator extracts the user object from the request, allowing
+        you to access the authenticated user's data directly in your controller
+        methods without having to manually retrieve it from the request object.
+        This not only makes your code more concise but also reduces the risk of
+        errors and improves maintainability. Custom decorators like this one are
+        particularly useful when you need to apply the same logic across
+        multiple controllers or routes, as they allow you to encapsulate and
+        reuse the logic cleanly and consistently.
+      </p>
 
       {/* Seventh Section */}
       <h3 className="section-title" id="services">
-        7. Keep Services Focused
+        7. Ensure Data Validation with Data Transfer Objects{" "}
       </h3>
       <p className="section-paragraph">
-        Services should be focused on a specific task or set of related tasks.
-        This ensures that your services remain easy to maintain and test.
+        Data Transfer Objects (DTOs) are used in NestJS to define the shape and
+        structure of the data being transferred between different parts of your
+        application. DTOs ensure type safety and provide a central place for
+        validating incoming data, which is crucial for maintaining data
+        integrity and preventing security vulnerabilities.
       </p>
       <div className="code-block">
         <pre>
           <code>
-            {`import { Injectable } from '@nestjs/common';
-
-@Injectable()
-export class UsersService {
-  private users = [];
-
-  findAll(): User[] {
-    return this.users;
-  }
-
-  create(user: User) {
-    this.users.push(user);
-  }
+            {`// create-user.dto.ts
+export class CreateUserDto {
+readonly name: string; // The name property, which must be a string
+readonly age: number;
+// The age property, which must be a number
+readonly email: string; // The email property, which must be a string
+}
+// users.controller.ts
+import { Controller, Post, Body } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './create-user.dto';
+ @Controller('users') // Defines the route prefix for this controller
+ export class UsersController {
+ constructor(private readonly usersService: UsersService) {} // Injects UsersService into the controller
+@Post()
+create(@Body() createUserDto: CreateUserDto) {
+this.usersService.create(createUserDto); // Calls the service's create method with the validated DTO
+}
 }`}
           </code>
         </pre>
@@ -323,51 +423,7 @@ bootstrap();`}
   );
 }
 
-function Footer() {
-  return (
-    <footer
-      className="footer"
-      style={{
-        backgroundColor: "#f8f8f8",
-        padding: "20px",
-        borderTop: "1px solid #ccc",
-        textAlign: "center",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <img src="logo.png" alt="HNG Boilerplate" />
-        </div>
-        <div>
-          <p>&copy; 2024 HNG Boilerplate</p>
-        </div>
-        <div>
-          <ul style={{ display: "flex", gap: "15px", listStyle: "none" }}>
-            <li>
-              <a href="#facebook">Facebook</a>
-            </li>
-            <li>
-              <a href="#twitter">Twitter</a>
-            </li>
-            <li>
-              <a href="#linkedin">LinkedIn</a>
-            </li>
-            <li>
-              <a href="#github">GitHub</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
+import Footer from "./Layouts/Footer";
 function App() {
   return (
     <div className="app-container">
