@@ -1,18 +1,28 @@
-import styles from './Header.module.css'
-import logo from "../../assets/logo.svg"
 const Header = () => {
   return (
-    <div className={styles.Header_container}>
-        <img src={logo} alt="" />
-        <nav className={styles.H_nav}>
-            <ul className={styles.H_ul}>
-                <li><a href="">Docs</a></li>
-                <li><a href="">Help</a></li>
-                <li><a href="">Templates</a></li>
-            </ul>
-        </nav>
-
-    </div>
+    <header
+    className="header"
+    style={{
+      backgroundColor: "white",
+      padding: "10px 20px",
+      borderBottom: "1px solid #ccc",
+    }}
+  >
+    <h1>HNG Boilerplate</h1>
+    <nav>
+      <ul style={{ display: "flex", gap: "15px", listStyle: "none" }}>
+        <li>
+          <a href="#home">Home</a>
+        </li>
+        <li>
+          <a href="#about">About</a>
+        </li>
+        <li>
+          <a href="#contact">Contact</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
   )
 }
 
