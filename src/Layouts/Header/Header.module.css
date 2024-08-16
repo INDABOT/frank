@@ -1,0 +1,31 @@
+.Header_container {
+    position: relative;
+  width: 100vw;
+  height: 116px;
+  padding: 32px 120px;
+  display: flex;
+  align-items: center;
+  background-color: #fafafa;
+  gap: 50%;
+}
+.H_nav .H_ul {
+    display: flex;
+    justify-content: space-between;
+    gap: 50%;
+}
+.H_nav .H_ul li {
+    list-style-type: none;
+}
+.H_nav .H_ul li a{
+    text-decoration: none;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19.2px;
+    text-align: center;
+    color: #434343;
+}
+.H_nav .H_ul li a:active{
+    color: #F97316;
+
+}
