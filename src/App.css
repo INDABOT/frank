@@ -227,9 +227,9 @@ aside ol li a {
   line-height: 28px;
   text-align: left;
 }
-aside{
+/* aside{
   position: fixed;
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -272,6 +272,42 @@ aside{
   .code-block {
     font-size: 12px;
     padding: 8px;
+  }
+
+  aside ol li a{
+    font-size: small;
+    
+  }
+  aside{
+    display: none;
+    overflow-x: hidden;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(-100%);
+  }
+  .sidebar.visible {
+    transform: translateX(0);
+  }
+
+  .menu-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: #333;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+  
+  .menu-button {
+    background-color: transparent;
+    border: none;
+    color: rgb(27, 1, 1);
+    font-size: 24px;
+    cursor: pointer;
   }
 }
 
